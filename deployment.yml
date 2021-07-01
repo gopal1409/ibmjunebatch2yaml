@@ -1,12 +1,15 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
+#any yaml file to apply in kubernetes kubectl apply -f nameoftheyamlfile/if you want to delete it kubectl delete -f nameof the yamlfile
+#any yaml will run from top to bottom and left to right. 
+apiVersion: apps/v1 #so we invoke an api apps/v1
+kind: Deployment #in apps/v1 api we are telling him to create a deployment
+metadata: #using metadata i am giving a name to the deployment
+  name: nginx-deployment #name of the deployment
 spec:
   replicas: 3
-  selector:
-    matchLabels:
-      app: nginx
+  selector: #slector map{key.value}
+    matchLabels: #matchexpression
+      app: nginx #{key.value}
+  #block related to pod creation
   template:
     metadata:
       labels:
