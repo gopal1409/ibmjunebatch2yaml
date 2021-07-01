@@ -4,6 +4,7 @@ apiVersion: apps/v1 #so we invoke an api apps/v1
 kind: Deployment #in apps/v1 api we are telling him to create a deployment
 metadata: #using metadata i am giving a name to the deployment
   name: nginx-deployment #name of the deployment
+  
 spec:
   replicas: 3
   selector: #slector map{key.value}
