@@ -1,0 +1,43 @@
+#any yaml file to apply in kubernetes kubectl apply -f nameoftheyamlfile/if you want to delete it kubectl delete -f nameof the yamlfile
+#any yaml will run from top to bottom and left to right. 
+apiVersion: apps/v1 #so we invoke an api apps/v1
+kind: Deployment #in apps/v1 api we are telling him to create a deployment
+metadata: #using metadata i am giving a name to the deployment
+  name: mysql #name of the deployment
+  
+spec:
+  replicas: 1
+  selector: #slector map{key.value}
+    matchLabels: #matchexpression
+      app: mysql #{key.value}
+  #block related to pod creation
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql 
+        image: mysql:5.6
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-db-password
+                key: db-password #when we deploy the mysql image automatically the password will be pushed from secre
+        ports:
+          - containerPort: 3306
+            name: mysql
+        #we need to attach the storage and configmap
+        volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql #inside your container path of the storage. 
+          - name: usermanagement-db-creation
+            mountPath: /docker-entrypoint-initdb.d
+      volumes: #mapping to actual storage
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: task-pv-claim
+        - name: usermanagement-db-creation
+          configMap:
+            name: usermanagement-db-creation-script
