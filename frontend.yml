@@ -1,0 +1,37 @@
+#any yaml file to apply in kubernetes kubectl apply -f nameoftheyamlfile/if you want to delete it kubectl delete -f nameof the yamlfile
+#any yaml will run from top to bottom and left to right. 
+apiVersion: apps/v1 #so we invoke an api apps/v1
+kind: Deployment #in apps/v1 api we are telling him to create a deployment
+metadata: #using metadata i am giving a name to the deployment
+  name: usermgmt-webapp #name of the deployment
+  
+spec:
+  replicas: 1
+  selector: #slector map{key.value}
+    matchLabels: #matchexpression
+      app: usermgmt-webapp #{key.value}
+  #block related to pod creation
+  template:
+    metadata:
+      labels:
+        app: usermgmt-webapp
+    spec:
+      containers:
+      - name: usermgmt-webapp
+        image: stacksimplify/kube-usermgmt-webapp:1.0.0-MySQLDB
+        ports:
+          - containerPort: 80
+        env:
+          - name: DB_HOSTNAME
+            value: "mysql"
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_NAME
+            value: "webappdb"  
+          - name: DB_USERNAME
+            value: "root"  
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysql-db-password
+                key: db-password #when we deploy the mysql image automatically the password will be pushed from secre
