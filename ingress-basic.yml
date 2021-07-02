@@ -10,6 +10,13 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: app1-nginx-clusterip-service
+            name: app2-nginx-clusterip-service #service based routing
             port:
               number: 80
+      - path: /app1/
+        pathType: Prefix
+        backend:
+          service:
+            name: app1-nginx-clusterip-service #service based routing
+            port:
+              number: 80        
