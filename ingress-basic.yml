@@ -8,7 +8,7 @@ spec:
       paths:
       - path: /
         backend:
-          service
+          service:
             name: app1-nginx-clusterip-service
             port:
               number: 80
